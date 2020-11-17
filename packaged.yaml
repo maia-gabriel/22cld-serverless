@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'trip-datalake
+
+  Rest API to manage a Data Lake of trip links
+
+  '
+Globals:
+  Function:
+    MemorySize: 512
+    Timeout: 20
+Outputs:
+  CreatetripRecordFunction:
+    Description: CreatetripRecord Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - CreatetripRecordFunction
+      - Arn
+  GettripRecordsByIscityFunction:
+    Description: GettripRecordsByIscity Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GettripRecordsByIscityFunction
+      - Arn
+  GettripRecordsByPeriodFunction:
+    Description: GettripRecordsByPeriod Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GettripRecordsByPeriodFunction
+      - Arn
+  GettripRecordsBycountryFunction:
+    Description: GettripRecordsBycountry Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GettripRecordsBycountryFunction
+      - Arn
+Resources:
+  CreatetripRecordFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        CreatetripRecord:
+          Properties:
+            Method: post
+            Path: /trip
+          Type: Api
+      Handler: br.com.iwe.handler.CreatetripRecord::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GettripRecordsByIscityFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GettripRecordsByIscity:
+          Properties:
+            Method: get
+            Path: /trip/{topic}/findByIscity
+            RequestParameters:
+            - method.request.querystring.iscity
+          Type: Api
+      Handler: br.com.iwe.handler.GettripRecordsByIscity::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GettripRecordsByPeriodFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GettripRecordsByPeriod:
+          Properties:
+            Method: get
+            Path: /trip/{topic}/findByPeriod
+            RequestParameters:
+            - method.request.querystring.starts
+            - method.request.querystring.ends
+          Type: Api
+      Handler: br.com.iwe.handler.GettripRecordsByPeriod::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GettripRecordsBycountryFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GettripRecordsBycountry:
+          Properties:
+            Method: get
+            Path: /trip/{topic}/findBycountry
+            RequestParameters:
+            - method.request.querystring.country
+          Type: Api
+      Handler: br.com.iwe.handler.GettripRecordsBycountry::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

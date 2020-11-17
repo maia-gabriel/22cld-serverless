@@ -1,0 +1,9 @@
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/handler/GetStudyRecordsByTag.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/dao/DynamoDBManager.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/model/HandlerResponse.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/dao/StudyRepository.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/model/Study.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/handler/CreateStudyRecord.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/model/HandlerRequest.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/handler/GetStudyRecordsByPeriod.java
+/Users/gabriel.maia/git/22cld-serverless/src/main/java/br/com/iwe/handler/GetStudyRecordsByIsConsumed.java

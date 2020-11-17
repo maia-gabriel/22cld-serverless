@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    trip-datalake
+
+    Rest API to manage a Data Lake of trip links
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+        Environment:
+          Variables:
+            TABLE_NAME: !Ref tripTable
+            ENDPOINT_OVERRIDE: ""
+
+Resources:
+
+  CreatetripRecordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.CreatetripRecord::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref tripTable     
+     Events:
+       CreatetripRecord:
+         Type: Api
+         Properties:
+           Path: /trip
+           Method: post
+           
+  GettripRecordsByPeriodFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GettripRecordsByPeriod::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref tripTable     
+     Events:
+       GettripRecordsByPeriod:
+         Type: Api
+         Properties:
+           Path: /trip/{topic}/findByPeriod
+           Method: get
+           RequestParameters:
+              - method.request.querystring.starts
+              - method.request.querystring.ends
+              
+  GettripRecordsBycountryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GettripRecordsBycountry::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref tripTable     
+     Events:
+       GettripRecordsBycountry:
+         Type: Api
+         Properties:
+           Path: /trip/{topic}/findBycountry
+           Method: get
+           RequestParameters:
+              - method.request.querystring.country
+
+  GettripRecordsByIscityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trip-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GettripRecordsByIscity::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref tripTable
+     Events:
+       GettripRecordsByIscity:
+         Type: Api
+         Properties:
+           Path: /trip/{topic}/findByIscity
+           Method: get
+           RequestParameters:
+              - method.request.querystring.iscity
+              
+  tripTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: trip
+      AttributeDefinitions:
+        - AttributeName: topic
+          AttributeType: S
+        - AttributeName: date
+          AttributeType: S
+        - AttributeName: country
+          AttributeType: S
+        - AttributeName: city
+          AttributeType: S            
+      KeySchema:
+        - AttributeName: topic
+          KeyType: HASH
+        - AttributeName: date
+          KeyType: RANGE
+      LocalSecondaryIndexes: 
+        - IndexName: countryIndex
+          KeySchema: 
+            - AttributeName: topic
+              KeyType: HASH
+            - AttributeName: country
+              KeyType: RANGE
+          Projection:
+             ProjectionType: ALL 
+        - IndexName: cityIndex
+          KeySchema: 
+            - AttributeName: topic
+              KeyType: HASH
+            - AttributeName: city
+              KeyType: RANGE
+          Projection:
+             ProjectionType: ALL      
+      BillingMode: PAY_PER_REQUEST              
+
+Outputs:
+
+    CreatetripRecordFunction:
+      Description: "CreatetripRecord Lambda Function ARN"
+      Value: !GetAtt CreatetripRecordFunction.Arn
+      
+    GettripRecordsByPeriodFunction:
+      Description: "GettripRecordsByPeriod Lambda Function ARN"
+      Value: !GetAtt GettripRecordsByPeriodFunction.Arn
+      
+    GettripRecordsBycountryFunction:
+      Description: "GettripRecordsBycountry Lambda Function ARN"
+      Value: !GetAtt GettripRecordsBycountryFunction.Arn
+      
+    GettripRecordsByIscityFunction:
+      Description: "GettripRecordsByIscity Lambda Function ARN"
+      Value: !GetAtt GettripRecordsByIscityFunction.Arn      
+     

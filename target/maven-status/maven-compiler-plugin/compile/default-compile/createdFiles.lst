@@ -1,0 +1,10 @@
+br/com/iwe/dao/DynamoDBManager.class
+br/com/iwe/model/HandlerResponse$Builder.class
+br/com/iwe/dao/tripRepository.class
+br/com/iwe/handler/CreatetripRecord.class
+br/com/iwe/model/HandlerRequest.class
+br/com/iwe/handler/GettripRecordsBycountry.class
+br/com/iwe/model/HandlerResponse.class
+br/com/iwe/model/trip.class
+br/com/iwe/handler/GettripRecordsByIscity.class
+br/com/iwe/handler/GettripRecordsByPeriod.class
